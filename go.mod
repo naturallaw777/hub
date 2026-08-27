@@ -6,11 +6,8 @@ require (
 	github.com/adrg/xdg v0.5.3
 	github.com/btcsuite/btcd v0.25.1-0.20260310163610-1c55c7c18179
 	github.com/btcsuite/btcd/btcutil v1.2.0
-	github.com/elnosh/gonuts v0.4.2
 	github.com/getAlby/go-nostr v0.0.0-20260805072924-9844f892c3c8
-	github.com/getAlby/ldk-node-go v0.0.0-20260805080406-af22e238c194
 	github.com/go-gormigrate/gormigrate/v2 v2.1.6
-	github.com/google/uuid v1.6.0
 	github.com/labstack/echo/v4 v4.15.4
 	github.com/mattn/go-sqlite3 v1.14.49
 	github.com/nbd-wtf/ln-decodepay v1.13.0
@@ -19,11 +16,9 @@ require (
 	github.com/stretchr/testify v1.11.1
 	github.com/tyler-smith/go-bip39 v1.1.0
 	github.com/wailsapp/wails/v2 v2.14.0
-	gitlab.com/ark-bitcoin/bark-ffi-bindings/golang v0.15.0
 	golang.org/x/crypto v0.54.0
 	golang.org/x/oauth2 v0.36.0
 	google.golang.org/grpc v1.82.1
-	google.golang.org/protobuf v1.36.11
 	gopkg.in/macaroon.v2 v2.1.0
 	gorm.io/driver/postgres v1.6.2
 	gorm.io/driver/sqlite v1.6.0
@@ -80,7 +75,6 @@ require (
 	github.com/felixge/httpsnoop v1.0.4 // indirect
 	github.com/fergusstrange/embedded-postgres v1.29.0 // indirect
 	github.com/frankban/quicktest v1.14.0 // indirect
-	github.com/fxamacker/cbor/v2 v2.7.0 // indirect
 	github.com/go-logr/logr v1.4.3 // indirect
 	github.com/go-logr/stdr v1.2.2 // indirect
 	github.com/go-macaroon-bakery/macaroonpb v1.0.0 // indirect
@@ -96,7 +90,7 @@ require (
 	github.com/google/btree v1.1.3 // indirect
 	github.com/google/pprof v0.0.0-20250403155104-27863c87afa6 // indirect
 	github.com/google/shlex v0.0.0-20191202100458-e7afc7fbc510 // indirect
-	github.com/gorilla/mux v1.8.1 // indirect
+	github.com/google/uuid v1.6.0 // indirect
 	github.com/grpc-ecosystem/go-grpc-middleware v1.4.0 // indirect
 	github.com/grpc-ecosystem/go-grpc-prometheus v1.2.0 // indirect
 	github.com/grpc-ecosystem/grpc-gateway v1.16.0 // indirect
@@ -150,7 +144,6 @@ require (
 	github.com/miekg/dns v1.1.62 // indirect
 	github.com/mitchellh/mapstructure v1.5.1-0.20231216201459-8508981c8b6c // indirect
 	github.com/moby/docker-image-spec v1.3.1 // indirect
-	github.com/moby/go-archive v0.1.0 // indirect
 	github.com/moby/moby/api v1.54.0 // indirect
 	github.com/moby/moby/client v0.3.0 // indirect
 	github.com/moby/sys/user v0.4.0 // indirect
@@ -176,7 +169,6 @@ require (
 	github.com/rivo/uniseg v0.4.7 // indirect
 	github.com/rogpeppe/fastuuid v1.2.0 // indirect
 	github.com/samber/lo v1.49.1 // indirect
-	github.com/shirou/gopsutil/v3 v3.24.4 // indirect
 	github.com/soheilhy/cmux v0.1.5 // indirect
 	github.com/spf13/pflag v1.0.6 // indirect
 	github.com/stretchr/objx v0.5.2 // indirect
@@ -194,7 +186,6 @@ require (
 	github.com/vulpemventures/go-secp256k1-zkp v1.1.6 // indirect
 	github.com/wailsapp/go-webview2 v1.0.22 // indirect
 	github.com/wailsapp/mimetype v1.4.1 // indirect
-	github.com/x448/float16 v0.8.4 // indirect
 	github.com/xeipuuv/gojsonpointer v0.0.0-20190905194746-02993c407bfb // indirect
 	github.com/xeipuuv/gojsonreference v0.0.0-20180127040603-bd5ef7bd5415 // indirect
 	github.com/xeipuuv/gojsonschema v1.2.0 // indirect
@@ -233,6 +224,7 @@ require (
 	google.golang.org/genproto v0.0.0-20250603155806-513f23925822 // indirect
 	google.golang.org/genproto/googleapis/api v0.0.0-20260414002931-afd174a4e478 // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20260414002931-afd174a4e478 // indirect
+	google.golang.org/protobuf v1.36.11 // indirect
 	gopkg.in/errgo.v1 v1.0.1 // indirect
 	gopkg.in/macaroon-bakery.v2 v2.3.0 // indirect
 	gopkg.in/natefinch/lumberjack.v2 v2.2.1 // indirect
