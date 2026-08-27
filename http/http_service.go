@@ -25,7 +25,6 @@ import (
 	"github.com/getAlby/hub/service"
 
 	"github.com/getAlby/hub/api"
-	"github.com/getAlby/hub/frontend"
 )
 
 type authTokenResponse struct {
@@ -113,8 +112,6 @@ func (httpSvc *HttpService) RegisterSharedRoutes(e *echo.Echo) {
 	e.POST("/api/unlock", httpSvc.unlockHandler, unlockRateLimiter)
 	e.POST("/api/backup", httpSvc.createBackupHandler, unlockRateLimiter)
 	e.GET("/logout", httpSvc.logoutHandler)
-
-	frontend.RegisterHandlers(e)
 
 	// restricted routes
 	// Configure middleware with the custom claims type
