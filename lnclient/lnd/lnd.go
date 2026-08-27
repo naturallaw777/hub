@@ -708,7 +708,7 @@ func (svc *LNDService) MakeInvoice(ctx context.Context, amountMsat int64, descri
 		DescriptionHash: descriptionHashBytes,
 		Expiry:          expiry,
 		RouteHints:      hints,
-		Private:         !hasPublicChannels, // use private channel hints in the invoice
+		Private:         true, // always include private channel route hints
 	}
 
 	resp, err := svc.client.AddInvoice(ctx, addInvoiceRequest)
