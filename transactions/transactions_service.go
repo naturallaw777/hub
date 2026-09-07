@@ -40,7 +40,7 @@ type TransactionsService interface {
 	MakeInvoice(ctx context.Context, amountMsat uint64, description string, descriptionHash string, expiry uint64, metadata map[string]interface{}, lnClient lnclient.LNClient, appId *uint, requestEventId *uint, throughNodePubkey *string) (*Transaction, error)
 	LookupTransaction(ctx context.Context, paymentHash string, transactionType *string, lnClient lnclient.LNClient, appId *uint) (*Transaction, error)
 	ListTransactions(ctx context.Context, from, until, limit, offset uint64, unpaidOutgoing bool, unpaidIncoming bool, lnClient lnclient.LNClient, appId *uint, forceFilterByAppId bool, filters *ListTransactionsFilters) (transactions []Transaction, totalCount uint64, err error)
-	SendPaymentSync(payReq string, amountMsat *uint64, metadata map[string]interface{}, lnClient lnclient.LNClient, appId *uint, requestEventId *uint) (*Transaction, error)
+	SendPaymentSync(payReq string, amountMsat *uint64, metadata map[string]interface{}, lnClient lnclient.LNClient, appId *uint, requestEventId *uint, skipAppScopeCheck bool) (*Transaction, error)
 	SendKeysend(amountMsat uint64, destination string, customRecords []lnclient.TLVRecord, preimage string, lnClient lnclient.LNClient, appId *uint, requestEventId *uint) (*Transaction, error)
 	MakeHoldInvoice(ctx context.Context, amountMsat uint64, description string, descriptionHash string, expiry uint64, paymentHash string, minCltvExpiryDelta *uint64, metadata map[string]interface{}, lnClient lnclient.LNClient, appId *uint, requestEventId *uint) (*Transaction, error)
 	SettleHoldInvoice(ctx context.Context, preimage string, lnClient lnclient.LNClient) (*Transaction, error)
@@ -298,7 +298,7 @@ func (svc *transactionsService) MakeHoldInvoice(ctx context.Context, amountMsat 
 	return &dbTransaction, nil
 }
 
-func (svc *transactionsService) SendPaymentSync(payReq string, amountMsat *uint64, metadata map[string]interface{}, lnClient lnclient.LNClient, appId *uint, requestEventId *uint) (*Transaction, error) {
+func (svc *transactionsService) SendPaymentSync(payReq string, amountMsat *uint64, metadata map[string]interface{}, lnClient lnclient.LNClient, appId *uint, requestEventId *uint, skipAppScopeCheck bool) (*Transaction, error) {
 	var metadataBytes []byte
 	if metadata != nil {
 		var err error
@@ -384,7 +384,7 @@ func (svc *transactionsService) SendPaymentSync(payReq string, amountMsat *uint6
 				return errors.New("there is already a payment pending for this invoice")
 			}
 
-			err := svc.validateCanPay(tx, appId, paymentAmountMsat, paymentRequest.Description, selfPayment)
+			err := svc.validateCanPay(tx, appId, paymentAmountMsat, paymentRequest.Description, selfPayment, skipAppScopeCheck)
 			if err != nil {
 				return err
 			}
@@ -504,7 +504,7 @@ func (svc *transactionsService) SendKeysend(amountMsat uint64, destination strin
 		balanceValidationLock.Lock()
 		defer balanceValidationLock.Unlock()
 		return svc.db.Transaction(func(tx *gorm.DB) error {
-			err := svc.validateCanPay(tx, appId, amountMsat, "", selfPayment)
+			err := svc.validateCanPay(tx, appId, amountMsat, "", selfPayment, false)
 			if err != nil {
 				return err
 			}
@@ -1130,14 +1130,16 @@ func (svc *transactionsService) interceptSelfHoldPayment(paymentRequest string, 
 	}
 }
 
-func (svc *transactionsService) validateCanPay(tx *gorm.DB, appId *uint, amountMsat uint64, description string, selfPayment bool) error {
+func (svc *transactionsService) validateCanPay(tx *gorm.DB, appId *uint, amountMsat uint64, description string, selfPayment bool, skipAppScopeCheck bool) error {
 	amountWithFeeReserveMsat := amountMsat
 	if !selfPayment {
 		amountWithFeeReserveMsat += CalculateFeeReserveMsat(amountMsat)
 	}
 
 	// ensure balance for isolated apps
-	if appId != nil {
+	// (skipped for operator-initiated internal transfers, which authorize the
+	// move themselves and must not require the source app to hold pay_invoice)
+	if appId != nil && !skipAppScopeCheck {
 		var app db.App
 		result := tx.Limit(1).Find(&app, &db.App{
 			ID: *appId,
